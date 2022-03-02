@@ -16,10 +16,11 @@ const Main = (props) => {
   const roomRef = useRef();
   const userRef = useRef();
   const [err, setErr] = useState(false);
+  const [allowJoin,setAllowJoin]=useState(false)
   const [errMsg, setErrMsg] = useState('');
   const [username, setuserName] = useState();
   const [roomname, setroomName] = useState();
-  
+  const email=['shivanggautam3@gmail.com','shivang1750510052@gmail.com','gautam@gmail.com','happy@gmail.com','abhi@gmail.com`']
   const history = useHistory() 
 
   function Cancel(){
@@ -58,7 +59,16 @@ const Main = (props) => {
       socket.emit('BE-check-user', { roomId: roomName, userName });
     }
   }
-
+const validate = (e) => { 
+  let temp=false
+  email.forEach(element=>{
+    if(element==e){
+      temp=true
+    }
+  })
+  // temp == false && alert('email not found')
+setAllowJoin(temp)
+ }
   return (
     <div id="root">
       <div >
@@ -77,14 +87,19 @@ const Main = (props) => {
                       <div className='d-flex flex-column'>
                         <label style={{ fontSize: "20px", marginTop: '5px',color:'black' }} className="mb-4" for="formGroupExampleInput"><b>User Name</b></label>
                         <label style={{ fontSize: "20px",color:'black' }} className="mb-4" for="formGroupExampleInput"><b>Room id</b></label>
+                        <label style={{ fontSize: "20px",color:'black' }} className="mb-4" for="formGroupExampleInput"><b>email</b></label>
+                        
                       </div>
                       <div className='d-flex flex-column ml-3'>
                         <input className="form-control mb-3 " type="text" placeholder="Smith" onChange={(e) => setuserName(e.target.value)} ref={userRef} />
                         <input className="form-control mb-3" type="text" placeholder="874" onChange={(e) => setroomName(e.target.value)} ref={roomRef} />
+                        <input className="form-control mb-3" type="text" placeholder="Enter email" onChange={(e) => validate(e.target.value)} />
                       </div>
                     </div>
                     <button onClick={Cancel} type="submit" class="btn btn-danger">Cancel</button>&nbsp;&nbsp;
-                    <button onClick={clickJoin} type="submit" class="btn btn-primary">Join</button>
+                    <button 
+                    disabled={!allowJoin}
+                    onClick={clickJoin} type="submit" class="btn btn-primary">Join</button>
                     {err ? <div style={{ marginTop: '10px', fontSize: '20px', color: '#e85a71' }}>{errMsg}</div> : null}
                   </div>
                 </div>
